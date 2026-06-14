@@ -9,6 +9,7 @@ const questions = [
     id: 'communication_style',
     question: 'How do you like your doctor to communicate?',
     subtitle: 'Think about past appointments that felt right or wrong.',
+    type: 'choice',
     options: [
       { value: 'Warm and collaborative', label: 'Warm and conversational', description: 'They take time to build a relationship and check in on you as a person' },
       { value: 'Clear and direct', label: 'Clear and efficient', description: 'They get to the point, respect your time, and give direct answers' },
@@ -20,6 +21,7 @@ const questions = [
     id: 'appointment_pace',
     question: 'What kind of appointments work best for you?',
     subtitle: 'There is no right answer — it depends on your life and schedule.',
+    type: 'choice',
     options: [
       { value: 'Thorough, takes time', label: 'Long and thorough', description: 'I want plenty of time to cover everything, even if it means waiting longer' },
       { value: 'Efficient but thorough', label: 'Efficient but complete', description: 'Covers everything important without unnecessary time' },
@@ -31,6 +33,7 @@ const questions = [
     id: 'care_philosophy',
     question: 'What matters most to you in how a doctor approaches care?',
     subtitle: 'This helps us find someone whose values align with yours.',
+    type: 'choice',
     options: [
       { value: 'Preventive and holistic', label: 'Preventive and holistic', description: 'Focus on keeping me healthy long term and treating me as a whole person' },
       { value: 'Evidence-based', label: 'Evidence-based and scientific', description: 'I want a doctor who follows the latest research and clinical guidelines' },
@@ -42,6 +45,7 @@ const questions = [
     id: 'decision_making',
     question: 'How do you want to make decisions about your health?',
     subtitle: 'Some people want guidance, others want to be equal partners.',
+    type: 'choice',
     options: [
       { value: 'Patient education', label: 'Teach me everything', description: 'I want to fully understand my options and make informed decisions myself' },
       { value: 'Long-term relationships', label: 'Guide me', description: 'I trust my doctor to recommend what is best and explain their reasoning' },
@@ -53,6 +57,7 @@ const questions = [
     id: 'language',
     question: 'Do you need a doctor who speaks a specific language?',
     subtitle: 'We will prioritize doctors who speak your preferred language.',
+    type: 'choice',
     options: [
       { value: 'English', label: 'English only is fine', description: null },
       { value: 'Spanish', label: 'Spanish', description: null },
@@ -64,6 +69,7 @@ const questions = [
     id: 'insurance',
     question: 'What insurance do you have?',
     subtitle: 'We will only show doctors who accept your plan.',
+    type: 'choice',
     options: [
       { value: 'Aetna', label: 'Aetna', description: null },
       { value: 'Blue Cross', label: 'Blue Cross Blue Shield', description: null },
@@ -74,15 +80,12 @@ const questions = [
     ]
   },
   {
-    id: 'location_city',
-    question: 'What neighborhood are you in?',
+    id: 'zip_code',
+    question: 'What is your zip code?',
     subtitle: 'We will show you doctors closest to you first.',
-    options: [
-      { value: 'Chicago', label: 'Chicago', description: null },
-      { value: 'Lincoln Park', label: 'Lincoln Park', description: null },
-      { value: 'Wicker Park', label: 'Wicker Park', description: null },
-      { value: 'Hyde Park', label: 'Hyde Park', description: null },
-    ]
+    type: 'text',
+    placeholder: 'e.g. 60614',
+    options: []
   },
 ]
 
@@ -91,20 +94,25 @@ export default function QuizPage() {
   const [step, setStep] = useState(0)
   const [answers, setAnswers] = useState<Record<string, string>>({})
   const [selected, setSelected] = useState<string | null>(null)
+  const [textInput, setTextInput] = useState('')
   const [saving, setSaving] = useState(false)
 
   const current = questions[step]
   const isLast = step === questions.length - 1
   const progress = ((step) / questions.length) * 100
+  const isTextQuestion = current.type === 'text'
+  const currentValue = isTextQuestion ? textInput : selected
+  const hasAnswer = isTextQuestion ? textInput.length === 5 : !!selected
 
   function handleSelect(value: string) {
     setSelected(value)
   }
 
   async function handleNext() {
-    if (!selected) return
+    if (!hasAnswer) return
 
-    const updatedAnswers = { ...answers, [current.id]: selected }
+    const value = isTextQuestion ? textInput : selected!
+    const updatedAnswers = { ...answers, [current.id]: value }
     setAnswers(updatedAnswers)
 
     if (isLast) {
@@ -116,19 +124,35 @@ export default function QuizPage() {
         .from('patient_preferences')
         .insert([{
           session_id: sessionId,
-          ...updatedAnswers
+          communication_style: updatedAnswers.communication_style,
+          appointment_pace: updatedAnswers.appointment_pace,
+          care_philosophy: updatedAnswers.care_philosophy,
+          decision_making: updatedAnswers.decision_making,
+          language: updatedAnswers.language,
+          insurance: updatedAnswers.insurance,
+          zip_code: updatedAnswers.zip_code,
         }])
 
-      router.push(`/doctors?session=${sessionId}&insurance=${updatedAnswers.insurance}&language=${updatedAnswers.language}`)
+      router.push(`/doctors?session=${sessionId}&insurance=${updatedAnswers.insurance}&language=${updatedAnswers.language}&zip=${updatedAnswers.zip_code}`)
     } else {
-      setSelected(null)
+      const nextQuestion = questions[step + 1]
+      setSelected(answers[nextQuestion.id] || null)
+      setTextInput(answers[nextQuestion.id] || '')
       setStep(step + 1)
     }
   }
 
   function handleBack() {
     if (step === 0) return
-    setSelected(answers[questions[step - 1].id] || null)
+    const prevQuestion = questions[step - 1]
+    const prevAnswer = answers[prevQuestion.id] || ''
+    if (prevQuestion.type === 'text') {
+      setTextInput(prevAnswer)
+      setSelected(null)
+    } else {
+      setSelected(prevAnswer || null)
+      setTextInput('')
+    }
     setStep(step - 1)
   }
 
@@ -165,37 +189,55 @@ export default function QuizPage() {
         </div>
 
         {/* Options */}
-        <div className="grid grid-cols-1 gap-3 flex-1">
-          {current.options.map(option => (
-            <button
-              key={option.value}
-              onClick={() => handleSelect(option.value)}
-              className={`text-left p-5 rounded-2xl border transition-all ${
-                selected === option.value
-                  ? 'bg-emerald-950 border-emerald-500 text-white'
-                  : 'bg-zinc-900 border-white/10 hover:border-white/30 text-white'
-              }`}
-            >
-              <div className="flex items-start gap-4">
-                <div className={`w-5 h-5 rounded-full border-2 flex-shrink-0 mt-0.5 flex items-center justify-center transition-all ${
+        {isTextQuestion ? (
+          <div className="flex-1">
+            <input
+              type="text"
+              inputMode="numeric"
+              maxLength={5}
+              placeholder={current.placeholder}
+              value={textInput}
+              onChange={e => {
+                const val = e.target.value.replace(/\D/g, '').slice(0, 5)
+                setTextInput(val)
+              }}
+              className="w-full px-6 py-5 bg-zinc-900 border border-white/10 rounded-2xl focus:outline-none focus:border-emerald-500 placeholder-zinc-600 text-2xl text-white tracking-widest"
+            />
+            <p className="text-zinc-600 text-sm mt-3">5 digit US zip code</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-3 flex-1">
+            {current.options.map(option => (
+              <button
+                key={option.value}
+                onClick={() => handleSelect(option.value)}
+                className={`text-left p-5 rounded-2xl border transition-all ${
                   selected === option.value
-                    ? 'border-emerald-500 bg-emerald-500'
-                    : 'border-zinc-600'
-                }`}>
-                  {selected === option.value && (
-                    <div className="w-2 h-2 rounded-full bg-black" />
-                  )}
+                    ? 'bg-emerald-950 border-emerald-500 text-white'
+                    : 'bg-zinc-900 border-white/10 hover:border-white/30 text-white'
+                }`}
+              >
+                <div className="flex items-start gap-4">
+                  <div className={`w-5 h-5 rounded-full border-2 flex-shrink-0 mt-0.5 flex items-center justify-center transition-all ${
+                    selected === option.value
+                      ? 'border-emerald-500 bg-emerald-500'
+                      : 'border-zinc-600'
+                  }`}>
+                    {selected === option.value && (
+                      <div className="w-2 h-2 rounded-full bg-black" />
+                    )}
+                  </div>
+                  <div>
+                    <div className="font-medium">{option.label}</div>
+                    {option.description && (
+                      <div className="text-sm text-zinc-400 mt-1">{option.description}</div>
+                    )}
+                  </div>
                 </div>
-                <div>
-                  <div className="font-medium">{option.label}</div>
-                  {option.description && (
-                    <div className="text-sm text-zinc-400 mt-1">{option.description}</div>
-                  )}
-                </div>
-              </div>
-            </button>
-          ))}
-        </div>
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* Navigation */}
         <div className="flex gap-3 mt-8">
@@ -209,7 +251,7 @@ export default function QuizPage() {
           )}
           <button
             onClick={handleNext}
-            disabled={!selected || saving}
+            disabled={!hasAnswer || saving}
             className="flex-1 bg-emerald-500 hover:bg-emerald-600 disabled:bg-zinc-800 disabled:text-zinc-600 text-black font-semibold py-4 rounded-2xl transition-all text-base"
           >
             {saving ? 'Finding your matches...' : isLast ? 'Find my doctors →' : 'Next →'}
