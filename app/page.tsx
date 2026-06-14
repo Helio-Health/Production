@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { createClient } from '@supabase/supabase-js'
 
 const supabase = createClient(
@@ -58,9 +59,24 @@ export default function Home() {
           </h1>
 
           <p className="text-xl text-zinc-400 mb-12 max-w-lg mx-auto">
-            Real matching based on communication style, values, and care philosophy — 
+            Real matching based on communication style, values, and care philosophy —
             not just who has an open slot next Tuesday.
           </p>
+
+          <div className="mb-8">
+            <Link
+              href="/quiz"
+              className="inline-block bg-emerald-500 hover:bg-emerald-600 text-black font-semibold px-8 py-4 rounded-2xl transition-all text-base mr-4"
+            >
+              Find my doctor →
+            </Link>
+            <Link
+              href="/doctors"
+              className="inline-block bg-zinc-900 hover:bg-zinc-800 text-white font-medium px-8 py-4 rounded-2xl transition-all text-base border border-white/10"
+            >
+              Browse all doctors
+            </Link>
+          </div>
 
           {status === 'success' ? (
             <div className="bg-zinc-900 border border-emerald-900 rounded-3xl p-10">
