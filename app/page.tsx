@@ -61,9 +61,25 @@ export default function Home() {
       <section className="flex-1 flex flex-col items-center justify-center px-6 py-20 text-center">
         <div className="max-w-2xl mx-auto">
 
-          <span className="inline-block bg-emerald-950 text-emerald-400 text-sm font-medium px-5 py-2 rounded-full mb-8 border border-emerald-900">
-            Launching soon in select cities
-          </span>
+         <span className="inline-block bg-emerald-950 text-emerald-400 text-sm font-medium px-5 py-2 rounded-full mb-8 border border-emerald-900">
+           Launching soon in select cities
+         </span>
+
+        <div className="mb-8 flex flex-col gap-4">
+         <a
+           href="/quiz"
+           className="inline-block bg-emerald-500 hover:bg-emerald-600 text-black font-semibold px-9 py-4 rounded-2xl transition-all text-base"
+        >
+           Find my doctor →
+         </a>
+
+         <a
+          href="/doctors"
+          className="inline-block bg-zinc-900 hover:bg-zinc-800 text-white font-medium px-8 py-4 rounded-2xl transition-all text-base border border-white/10"
+        >
+          Browse All Doctors
+         </a>
+        </div>
 
           <h1 className="text-6xl font-bold tracking-tight leading-tight mb-8">
             The doctor who actually <span className="text-emerald-400">understands you</span>

@@ -101,7 +101,6 @@ export default function QuizPage() {
   const isLast = step === questions.length - 1
   const progress = ((step) / questions.length) * 100
   const isTextQuestion = current.type === 'text'
-  const currentValue = isTextQuestion ? textInput : selected
   const hasAnswer = isTextQuestion ? textInput.length === 5 : !!selected
 
   function handleSelect(value: string) {
@@ -159,7 +158,6 @@ export default function QuizPage() {
   return (
     <main className="min-h-screen bg-zinc-950 text-white flex flex-col">
 
-      {/* Nav */}
       <nav className="px-8 py-6 flex items-center justify-between max-w-3xl mx-auto w-full border-b border-white/10">
         <div className="flex items-center gap-3">
           <svg width="28" height="28" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
@@ -176,30 +174,20 @@ export default function QuizPage() {
           </svg>
           <span className="text-2xl text-white" style={{ fontFamily: 'Georgia, serif', letterSpacing: '-0.5px' }}>helio</span>
         </div>
-         <span className="text-sm text-zinc-500">{step + 1} of {questions.length}</span>
+        <span className="text-sm text-zinc-500">{step + 1} of {questions.length}</span>
       </nav>
 
-      {/* Progress bar */}
       <div className="h-0.5 bg-zinc-800">
-        <div
-          className="h-0.5 bg-emerald-500 transition-all duration-500"
-          style={{ width: `${progress}%` }}
-        />
+        <div className="h-0.5 bg-emerald-500 transition-all duration-500" style={{ width: `${progress}%` }}/>
       </div>
 
       <div className="flex-1 flex flex-col max-w-3xl mx-auto w-full px-6 py-12">
 
-        {/* Question */}
         <div className="mb-10">
-          <h1 className="text-3xl font-bold tracking-tight mb-3">
-            {current.question}
-          </h1>
-          {current.subtitle && (
-            <p className="text-zinc-400">{current.subtitle}</p>
-          )}
+          <h1 className="text-3xl font-bold tracking-tight mb-3">{current.question}</h1>
+          {current.subtitle && <p className="text-zinc-400">{current.subtitle}</p>}
         </div>
 
-        {/* Options */}
         {isTextQuestion ? (
           <div className="flex-1">
             <input
@@ -250,7 +238,6 @@ export default function QuizPage() {
           </div>
         )}
 
-        {/* Navigation */}
         <div className="flex gap-3 mt-8">
           {step > 0 && (
             <button
