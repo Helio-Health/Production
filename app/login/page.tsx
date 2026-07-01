@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createSupabaseBrowser } from '@/lib/supabase-client'
+import ThemeToggle from '@/components/ThemeToggle'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -37,28 +38,33 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-zinc-950 text-white flex flex-col items-center justify-center px-6">
+    <main className="min-h-screen bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] flex flex-col items-center justify-center px-6">
       <div className="w-full max-w-sm">
 
         {/* Logo */}
-        <div className="flex items-center gap-3 justify-center mb-10">
-          <svg width="28" height="28" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="14" cy="14" r="5.5" fill="none" stroke="#10b981" strokeWidth="2"/>
-            <circle cx="14" cy="14" r="2" fill="#10b981"/>
-            <line x1="14" y1="6" x2="14" y2="3.5" stroke="#10b981" strokeWidth="2" strokeLinecap="round"/>
-            <line x1="14" y1="22" x2="14" y2="24.5" stroke="#10b981" strokeWidth="2" strokeLinecap="round"/>
-            <line x1="6" y1="14" x2="3.5" y2="14" stroke="#10b981" strokeWidth="2" strokeLinecap="round"/>
-            <line x1="22" y1="14" x2="24.5" y2="14" stroke="#10b981" strokeWidth="2" strokeLinecap="round"/>
-            <line x1="8.9" y1="8.9" x2="7.1" y2="7.1" stroke="#10b981" strokeWidth="2" strokeLinecap="round"/>
-            <line x1="19.1" y1="19.1" x2="20.9" y2="20.9" stroke="#10b981" strokeWidth="2" strokeLinecap="round"/>
-            <line x1="19.1" y1="8.9" x2="20.9" y2="7.1" stroke="#10b981" strokeWidth="2" strokeLinecap="round"/>
-            <line x1="8.9" y1="19.1" x2="7.1" y2="20.9" stroke="#10b981" strokeWidth="2" strokeLinecap="round"/>
-          </svg>
-          <span className="text-2xl text-white" style={{ fontFamily: 'Georgia, serif', letterSpacing: '-0.5px' }}>helio</span>
+        <div className="relative flex items-center justify-center mb-10">
+          <div className="flex items-center gap-3">
+            <svg width="28" height="28" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="14" cy="14" r="5.5" fill="none" stroke="#7c3aed" strokeWidth="2"/>
+              <circle cx="14" cy="14" r="2" fill="#7c3aed"/>
+              <line x1="14" y1="6" x2="14" y2="3.5" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round"/>
+              <line x1="14" y1="22" x2="14" y2="24.5" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round"/>
+              <line x1="6" y1="14" x2="3.5" y2="14" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round"/>
+              <line x1="22" y1="14" x2="24.5" y2="14" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round"/>
+              <line x1="8.9" y1="8.9" x2="7.1" y2="7.1" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round"/>
+              <line x1="19.1" y1="19.1" x2="20.9" y2="20.9" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round"/>
+              <line x1="19.1" y1="8.9" x2="20.9" y2="7.1" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round"/>
+              <line x1="8.9" y1="19.1" x2="7.1" y2="20.9" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+            <span className="text-2xl text-[var(--color-text-primary)]" style={{ fontFamily: 'Georgia, serif', letterSpacing: '-0.5px' }}>helio</span>
+          </div>
+          <div className="absolute right-0">
+            <ThemeToggle />
+          </div>
         </div>
 
         <h1 className="text-2xl font-bold text-center mb-2">Welcome back</h1>
-        <p className="text-zinc-400 text-sm text-center mb-8">Sign in to manage your profile and patient requests.</p>
+        <p className="text-[var(--color-text-secondary)] text-sm text-center mb-8">Sign in to manage your profile and patient requests.</p>
 
         <div className="flex flex-col gap-3">
 
@@ -79,7 +85,7 @@ export default function LoginPage() {
           {/* Divider */}
           <div className="flex items-center gap-3 my-1">
             <div className="flex-1 h-px bg-white/10"/>
-            <span className="text-xs text-zinc-500">or</span>
+            <span className="text-xs text-[var(--color-text-tertiary)]">or</span>
             <div className="flex-1 h-px bg-white/10"/>
           </div>
 
@@ -89,7 +95,7 @@ export default function LoginPage() {
             placeholder="your@email.com"
             value={email}
             onChange={e => setEmail(e.target.value)}
-            className="w-full px-4 py-3 bg-zinc-900 border border-white/10 rounded-2xl focus:outline-none focus:border-emerald-500 placeholder-zinc-600 text-sm text-white"
+            className="w-full px-4 py-3 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-2xl focus:outline-none focus:border-[var(--color-accent)] placeholder-[var(--color-text-tertiary)] text-sm text-[var(--color-text-primary)]"
           />
 
           <input
@@ -97,7 +103,7 @@ export default function LoginPage() {
             placeholder="Your password"
             value={password}
             onChange={e => setPassword(e.target.value)}
-            className="w-full px-4 py-3 bg-zinc-900 border border-white/10 rounded-2xl focus:outline-none focus:border-emerald-500 placeholder-zinc-600 text-sm text-white"
+            className="w-full px-4 py-3 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-2xl focus:outline-none focus:border-[var(--color-accent)] placeholder-[var(--color-text-tertiary)] text-sm text-[var(--color-text-primary)]"
           />
 
           {status === 'error' && (
@@ -107,14 +113,14 @@ export default function LoginPage() {
           <button
             onClick={handleEmailLogin}
             disabled={status === 'loading' || !email || !password}
-            className="w-full bg-emerald-500 hover:bg-emerald-600 disabled:bg-zinc-800 disabled:text-zinc-600 text-black font-semibold py-4 rounded-2xl transition-all text-sm"
+            className="w-full bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] disabled:bg-[var(--color-bg-tertiary)] disabled:text-[var(--color-text-tertiary)] text-black font-semibold py-4 rounded-2xl transition-all text-sm"
           >
             {status === 'loading' ? 'Signing in...' : 'Sign in'}
           </button>
 
-          <p className="text-xs text-zinc-600 text-center mt-2">
+          <p className="text-xs text-[var(--color-text-tertiary)] text-center mt-2">
             Don't have an account?{' '}
-            <a href="/signup" className="text-emerald-500 hover:text-emerald-400">Sign up</a>
+            <a href="/signup" className="text-[var(--color-accent)] hover:text-[var(--color-accent-hover)]">Sign up</a>
           </p>
 
         </div>

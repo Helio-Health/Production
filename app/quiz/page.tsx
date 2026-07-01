@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
+import ThemeToggle from '@/components/ThemeToggle'
 
 const questions = [
   {
@@ -156,36 +157,39 @@ export default function QuizPage() {
   }
 
   return (
-    <main className="min-h-screen bg-zinc-950 text-white flex flex-col">
+    <main className="min-h-screen bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] flex flex-col">
 
-      <nav className="px-8 py-6 flex items-center justify-between max-w-3xl mx-auto w-full border-b border-white/10">
+      <nav className="px-8 py-6 flex items-center justify-between max-w-3xl mx-auto w-full border-b border-[var(--color-border)]">
         <div className="flex items-center gap-3">
           <svg width="28" height="28" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="14" cy="14" r="5.5" fill="none" stroke="#10b981" strokeWidth="2"/>
-            <circle cx="14" cy="14" r="2" fill="#10b981"/>
-            <line x1="14" y1="6" x2="14" y2="3.5" stroke="#10b981" strokeWidth="2" strokeLinecap="round"/>
-            <line x1="14" y1="22" x2="14" y2="24.5" stroke="#10b981" strokeWidth="2" strokeLinecap="round"/>
-            <line x1="6" y1="14" x2="3.5" y2="14" stroke="#10b981" strokeWidth="2" strokeLinecap="round"/>
-            <line x1="22" y1="14" x2="24.5" y2="14" stroke="#10b981" strokeWidth="2" strokeLinecap="round"/>
-            <line x1="8.9" y1="8.9" x2="7.1" y2="7.1" stroke="#10b981" strokeWidth="2" strokeLinecap="round"/>
-            <line x1="19.1" y1="19.1" x2="20.9" y2="20.9" stroke="#10b981" strokeWidth="2" strokeLinecap="round"/>
-            <line x1="19.1" y1="8.9" x2="20.9" y2="7.1" stroke="#10b981" strokeWidth="2" strokeLinecap="round"/>
-            <line x1="8.9" y1="19.1" x2="7.1" y2="20.9" stroke="#10b981" strokeWidth="2" strokeLinecap="round"/>
+            <circle cx="14" cy="14" r="5.5" fill="none" stroke="#7c3aed" strokeWidth="2"/>
+            <circle cx="14" cy="14" r="2" fill="#7c3aed"/>
+            <line x1="14" y1="6" x2="14" y2="3.5" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round"/>
+            <line x1="14" y1="22" x2="14" y2="24.5" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round"/>
+            <line x1="6" y1="14" x2="3.5" y2="14" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round"/>
+            <line x1="22" y1="14" x2="24.5" y2="14" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round"/>
+            <line x1="8.9" y1="8.9" x2="7.1" y2="7.1" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round"/>
+            <line x1="19.1" y1="19.1" x2="20.9" y2="20.9" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round"/>
+            <line x1="19.1" y1="8.9" x2="20.9" y2="7.1" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round"/>
+            <line x1="8.9" y1="19.1" x2="7.1" y2="20.9" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round"/>
           </svg>
-          <span className="text-2xl text-white" style={{ fontFamily: 'Georgia, serif', letterSpacing: '-0.5px' }}>helio</span>
+          <span className="text-2xl text-[var(--color-text-primary)]" style={{ fontFamily: 'Georgia, serif', letterSpacing: '-0.5px' }}>helio</span>
         </div>
-        <span className="text-sm text-zinc-500">{step + 1} of {questions.length}</span>
+        <div className="flex items-center gap-4">
+          <ThemeToggle />
+          <span className="text-sm text-[var(--color-text-tertiary)]">{step + 1} of {questions.length}</span>
+        </div>
       </nav>
 
-      <div className="h-0.5 bg-zinc-800">
-        <div className="h-0.5 bg-emerald-500 transition-all duration-500" style={{ width: `${progress}%` }}/>
+      <div className="h-0.5 bg-[var(--color-bg-tertiary)]">
+        <div className="h-0.5 bg-[var(--color-accent)] transition-all duration-500" style={{ width: `${progress}%` }}/>
       </div>
 
       <div className="flex-1 flex flex-col max-w-3xl mx-auto w-full px-6 py-12">
 
         <div className="mb-10">
           <h1 className="text-3xl font-bold tracking-tight mb-3">{current.question}</h1>
-          {current.subtitle && <p className="text-zinc-400">{current.subtitle}</p>}
+          {current.subtitle && <p className="text-[var(--color-text-secondary)]">{current.subtitle}</p>}
         </div>
 
         {isTextQuestion ? (
@@ -200,9 +204,9 @@ export default function QuizPage() {
                 const val = e.target.value.replace(/\D/g, '').slice(0, 5)
                 setTextInput(val)
               }}
-              className="w-full px-6 py-5 bg-zinc-900 border border-white/10 rounded-2xl focus:outline-none focus:border-emerald-500 placeholder-zinc-600 text-2xl text-white tracking-widest"
+              className="w-full px-6 py-5 bg-[var(--color-bg-secondary)] border border-[var(--color-border)] rounded-2xl focus:outline-none focus:border-[var(--color-accent)] placeholder-[var(--color-text-tertiary)] text-2xl text-[var(--color-text-primary)] tracking-widest"
             />
-            <p className="text-zinc-600 text-sm mt-3">5 digit US zip code</p>
+            <p className="text-[var(--color-text-tertiary)] text-sm mt-3">5 digit US zip code</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-3 flex-1">
@@ -212,14 +216,14 @@ export default function QuizPage() {
                 onClick={() => handleSelect(option.value)}
                 className={`text-left p-5 rounded-2xl border transition-all ${
                   selected === option.value
-                    ? 'bg-emerald-950 border-emerald-500 text-white'
-                    : 'bg-zinc-900 border-white/10 hover:border-white/30 text-white'
+                    ? 'bg-[var(--color-accent-subtle)] border-[var(--color-accent)] text-[var(--color-text-primary)]'
+                    : 'bg-[var(--color-bg-secondary)] border-[var(--color-border)] hover:border-white/30 text-[var(--color-text-primary)]'
                 }`}
               >
                 <div className="flex items-start gap-4">
                   <div className={`w-5 h-5 rounded-full border-2 flex-shrink-0 mt-0.5 flex items-center justify-center transition-all ${
                     selected === option.value
-                      ? 'border-emerald-500 bg-emerald-500'
+                      ? 'border-[var(--color-accent)] bg-[var(--color-accent)]'
                       : 'border-zinc-600'
                   }`}>
                     {selected === option.value && (
@@ -229,7 +233,7 @@ export default function QuizPage() {
                   <div>
                     <div className="font-medium">{option.label}</div>
                     {option.description && (
-                      <div className="text-sm text-zinc-400 mt-1">{option.description}</div>
+                      <div className="text-sm text-[var(--color-text-secondary)] mt-1">{option.description}</div>
                     )}
                   </div>
                 </div>
@@ -242,7 +246,7 @@ export default function QuizPage() {
           {step > 0 && (
             <button
               onClick={handleBack}
-              className="px-6 py-4 rounded-2xl border border-white/10 text-zinc-400 hover:text-white hover:border-white/30 transition-all text-sm font-medium"
+              className="px-6 py-4 rounded-2xl border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-white/30 transition-all text-sm font-medium"
             >
               ← Back
             </button>
@@ -250,7 +254,7 @@ export default function QuizPage() {
           <button
             onClick={handleNext}
             disabled={!hasAnswer || saving}
-            className="flex-1 bg-emerald-500 hover:bg-emerald-600 disabled:bg-zinc-800 disabled:text-zinc-600 text-black font-semibold py-4 rounded-2xl transition-all text-base"
+            className="flex-1 bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] disabled:bg-[var(--color-bg-tertiary)] disabled:text-[var(--color-text-tertiary)] text-black font-semibold py-4 rounded-2xl transition-all text-base"
           >
             {saving ? 'Finding your matches...' : isLast ? 'Find my doctors →' : 'Next →'}
           </button>
