@@ -73,7 +73,9 @@ export default function DashboardPage() {
 
   const pending = matches.filter(m => m.status === 'pending')
   const accepted = matches.filter(m => m.status === 'accepted')
-  const firstName = doctor.name?.split(' ')[1] || doctor.name
+  const displayName = doctor.name?.startsWith('Dr. ')
+    ? doctor.name.split(' ')[1]
+    : doctor.name
 
   return (
     <main className="min-h-screen bg-zinc-950 text-white flex flex-col">
@@ -107,7 +109,7 @@ export default function DashboardPage() {
       <div className="max-w-5xl mx-auto w-full px-6 py-10 flex flex-col gap-6">
 
         <div>
-          <h1 className="text-2xl font-bold text-white">Welcome back, {firstName}</h1>
+          <h1 className="text-2xl font-bold text-white">Welcome back, {displayName}</h1>
           <p className="text-zinc-500 text-sm mt-1">{doctor.specialty?.join(', ')} · {doctor.location_city}, {doctor.location_state}</p>
         </div>
 
